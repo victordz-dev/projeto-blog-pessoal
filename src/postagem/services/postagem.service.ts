@@ -35,10 +35,10 @@ export class PostagemService {
     return postagem;
   }
 
-  async findByTitulo(titulo: string): Promise<Postagem[]> {
+  async findByTitle(title: string): Promise<Postagem[]> {
     return await this.postagemRepository.find({
       where: {
-        titulo: ILike(`%${titulo}%`),
+        titulo: ILike(`%${title}%`),
       },
       relations: {
         tema: true,
@@ -61,19 +61,19 @@ export class PostagemService {
   async update(postagem: Postagem): Promise<Postagem> {
     const buscaPostagem = await this.findById(postagem.id);
 
-    if (!buscaPostagem || !postagem.id) {
+    if (!buscaPostagem) {
       throw new HttpException('Postagem não encontrada!', HttpStatus.NOT_FOUND);
     }
 
     if (postagem.tema) {
       const tema = await this.temaService.findById(postagem.tema.id);
-
       if (!tema) {
         throw new HttpException('Tema não encontrado!', HttpStatus.NOT_FOUND);
       }
     }
 
-    return await this.postagemRepository.save(postagem);
+    await this.postagemRepository.update(postagem.id, postagem);
+    return this.findById(postagem.id);
   }
 
   async delete(id: number): Promise<DeleteResult> {
