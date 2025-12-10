@@ -84,4 +84,9 @@ export class PostagemService {
 
     return await this.postagemRepository.delete(id);
   }
+
+  async deleteAll(): Promise<DeleteResult> {
+    await this.postagemRepository.clear();
+    throw new HttpException('', HttpStatus.NO_CONTENT);
+  }
 }

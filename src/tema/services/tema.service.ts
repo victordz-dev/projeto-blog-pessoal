@@ -52,10 +52,11 @@ export class TemaService {
   async update(tema: Tema): Promise<Tema> {
     const buscaTema = await this.findById(tema.id);
 
-    if (!buscaTema || !tema.id)
+    if (!buscaTema)
       throw new HttpException('Tema não encontrado!', HttpStatus.NOT_FOUND);
 
-    return await this.temaRepository.save(tema);
+    await this.temaRepository.update(tema.id, tema);
+    return this.findById(tema.id);
   }
 
   async delete(id: number): Promise<DeleteResult> {
@@ -65,5 +66,9 @@ export class TemaService {
       throw new HttpException('Tema não encontrado!', HttpStatus.NOT_FOUND);
 
     return await this.temaRepository.delete(id);
+  }
+
+  async deleteAll(): Promise<void> {
+    await this.temaRepository.createQueryBuilder().delete().execute();
   }
 }

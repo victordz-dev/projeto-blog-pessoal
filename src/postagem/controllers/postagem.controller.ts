@@ -47,6 +47,12 @@ export class PostagemController {
     return this.postagemService.update(postagem);
   }
 
+  @Delete('/all')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  deleteAll(): Promise<DeleteResult> {
+    return this.postagemService.deleteAll();
+  }
+
   @Delete('/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   delete(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult> {
