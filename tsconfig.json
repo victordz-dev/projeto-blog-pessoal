@@ -1,24 +1,39 @@
 {
   "compilerOptions": {
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
-    "resolvePackageJsonExports": true,
-    "esModuleInterop": true,
-    "isolatedModules": true,
+    // --- 1. CONFIGURAÇÕES BASES DO NESTJS ---
+    "module": "commonjs",             // Padrão ouro para estabilidade no NestJS
     "declaration": true,
     "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,    // VITAL para NestJS
+    "experimentalDecorators": true,   // VITAL para NestJS
     "allowSyntheticDefaultImports": true,
-    "target": "ES2023",
+    "target": "ES2022",               // Atualizado para Node 18+
     "sourceMap": true,
     "outDir": "./dist",
+    "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
-    "strictNullChecks": true,
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false
+
+    // --- 2. MODO HARD (SEGURANÇA EXTREMA) ---
+    "strict": true,                   // Ativa noImplicitAny, strictNullChecks, etc. de uma vez
+    "noImplicitAny": true,            // Reforçando: NADA de any implícito
+    "strictNullChecks": true,         // Reforçando: Cuidado com nulos
+    "strictBindCallApply": true,      // Verifica se bind/call/apply batem com a assinatura
+    "forceConsistentCasingInFileNames": true, // Case sensitive nos nomes de arquivos
+    "noFallthroughCasesInSwitch": true, // Proíbe esquecer o 'break' no switch
+
+    // --- 3. REGRAS DE QUALIDADE DE CÓDIGO (LIMPEZA) ---
+    "noImplicitReturns": true,        // Funções devem retornar valor em todos os caminhos
+    "noUnusedLocals": true,           // Declarou variável dentro da função e não usou? ERRO.
+    "noUnusedParameters": true,       // Recebeu argumento na função e não usou? ERRO.
+    
+    // --- 4. REGRAS DE OOP (ORIENTAÇÃO A OBJETOS) ---
+    "noImplicitOverride": true,       // Se sobrescrever método de classe pai, OBRIGA usar palavra-chave 'override'
+    
+    // --- 5. O AJUSTE FINO DO MODO HARD ---
+    // Em NestJS, às vezes a injeção de dependência ocorre depois do construtor.
+    // Se 'strictPropertyInitialization' estiver true, você terá que usar '!' (ex: name!: string).
+    // Se achar chato demais, mude a linha abaixo para false.
+    "strictPropertyInitialization": true
   }
 }

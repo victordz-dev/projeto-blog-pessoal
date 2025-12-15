@@ -5,12 +5,12 @@ import { Postagem } from '../../postagem/entities/postagem.entity';
 @Entity({ name: 'tb_temas' })
 export class Tema {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @IsNotEmpty()
   @Column({ length: 255, nullable: false })
-  descricao: string;
+  name!: string;
 
   @OneToMany(() => Postagem, (postagem) => postagem.tema)
-  postagem: Postagem[];
+  postagem!: Postagem[];
 }

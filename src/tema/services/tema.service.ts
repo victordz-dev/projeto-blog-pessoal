@@ -10,15 +10,25 @@ export class TemaService {
     private temaRepository: Repository<Tema>,
   ) {}
 
-  async findAll(): Promise<Tema[]> {
-    return await this.temaRepository.find({
+  async checkTema(id: number): Promise<boolean> {
+    const find = await this.temaRepository.exists({
+      where: { id },
+    });
+    if (!find) {
+      throw new HttpException('Tema não encontrado', HttpStatus.NOT_FOUND);
+    }
+    return true;
+  }
+
+  async findAllTema(): Promise<Tema[]> {
+    return this.temaRepository.find({
       relations: {
         postagem: true,
       },
     });
   }
 
-  async findById(id: number): Promise<Tema> {
+  async findTemaById(id: number): Promise<Tema> {
     const tema = await this.temaRepository.findOne({
       where: {
         id,
@@ -28,16 +38,16 @@ export class TemaService {
       },
     });
 
-    if (!tema)
-      throw new HttpException('Tema não encontrado!', HttpStatus.NOT_FOUND);
-
+    if (!tema) {
+      throw new HttpException('Tema não encontrado', HttpStatus.NOT_FOUND);
+    }
     return tema;
   }
 
-  async findByDescricao(descricao: string): Promise<Tema[]> {
+  async findTemaByName(name: string): Promise<Tema[]> {
     return await this.temaRepository.find({
       where: {
-        descricao: ILike(`%${descricao}%`),
+        name: ILike(`%${name}%`),
       },
       relations: {
         postagem: true,
@@ -45,25 +55,23 @@ export class TemaService {
     });
   }
 
-  async create(Tema: Tema): Promise<Tema> {
-    return await this.temaRepository.save(Tema);
+  async createTema(tema: Tema): Promise<Tema> {
+    const temaExist = await this.temaRepository.findOne({
+      where: { name: tema.name },
+    });
+    if (temaExist) {
+      throw new HttpException('Tema já existe!', HttpStatus.BAD_REQUEST);
+    }
+    return this.temaRepository.save(tema);
   }
 
-  async update(tema: Tema): Promise<Tema> {
-    const buscaTema = await this.findById(tema.id);
-
-    if (!buscaTema || !tema.id)
-      throw new HttpException('Tema não encontrado!', HttpStatus.NOT_FOUND);
-
-    return await this.temaRepository.save(tema);
+  async updateTema(tema: Tema): Promise<Tema> {
+    await this.checkTema(tema.id);
+    return this.temaRepository.save(tema);
   }
 
-  async delete(id: number): Promise<DeleteResult> {
-    const buscaTema = await this.findById(id);
-
-    if (!buscaTema)
-      throw new HttpException('Tema não encontrado!', HttpStatus.NOT_FOUND);
-
-    return await this.temaRepository.delete(id);
+  async deleteTema(id: number): Promise<DeleteResult> {
+    await this.checkTema(id);
+    return this.temaRepository.delete(id);
   }
 }

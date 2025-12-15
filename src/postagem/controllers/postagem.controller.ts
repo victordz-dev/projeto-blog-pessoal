@@ -19,37 +19,43 @@ export class PostagemController {
   constructor(private readonly postagemService: PostagemService) {}
   @Get()
   @HttpCode(HttpStatus.OK)
-  findAll(): Promise<Postagem[]> {
-    return this.postagemService.findAll();
+  async findAllPost(): Promise<Postagem[]> {
+    return this.postagemService.findAllPost();
   }
 
   @Get('/:id')
   @HttpCode(HttpStatus.OK)
-  findById(@Param('id', ParseIntPipe) id: number): Promise<Postagem> {
-    return this.postagemService.findById(id);
+  async findPostById(@Param('id', ParseIntPipe) id: number): Promise<Postagem> {
+    return this.postagemService.findPostById(id);
   }
 
   @Get('/titulo/:title')
   @HttpCode(HttpStatus.OK)
-  findByTitle(@Param('title') title: string): Promise<Postagem[]> {
-    return this.postagemService.findByTitle(title);
+  async findPostByTitle(@Param('title') title: string): Promise<Postagem[]> {
+    return this.postagemService.findPostByTitle(title);
+  }
+
+  @Get('/tema/:temaId')
+  @HttpCode(HttpStatus.OK)
+  async findPostByTema(@Param('temaId', ParseIntPipe) temaId: number): Promise<Postagem[]> {
+    return this.postagemService.findPostByTema(temaId);
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() postagem: Postagem): Promise<Postagem> {
-    return this.postagemService.create(postagem);
+  async createPost(@Body() postagem: Postagem): Promise<Postagem> {
+    return this.postagemService.createPost(postagem);
   }
 
   @Put()
   @HttpCode(HttpStatus.OK)
-  update(@Body() postagem: Postagem): Promise<Postagem> {
-    return this.postagemService.update(postagem);
+  async updatePost(@Body() postagem: Postagem): Promise<Postagem> {
+    return this.postagemService.updatePost(postagem);
   }
 
   @Delete('/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  delete(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult> {
-    return this.postagemService.delete(id);
+  async deletePost(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult> {
+    return this.postagemService.deletePost(id);
   }
 }
