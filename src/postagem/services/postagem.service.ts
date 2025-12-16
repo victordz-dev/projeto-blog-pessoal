@@ -76,7 +76,8 @@ export class PostagemService {
   async updatePost(postagem: Postagem): Promise<Postagem> {
     await this.checkPost(postagem.id);
     await this.temaService.checkTema(postagem.tema.id);
-    return await this.postagemRepository.save(postagem);
+    await this.postagemRepository.update(postagem.id, postagem);
+    return this.findPostById(postagem.id);
   }
 
   async deletePost(id: number): Promise<DeleteResult> {

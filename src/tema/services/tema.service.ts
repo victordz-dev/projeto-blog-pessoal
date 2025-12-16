@@ -67,7 +67,8 @@ export class TemaService {
 
   async updateTema(tema: Tema): Promise<Tema> {
     await this.checkTema(tema.id);
-    return this.temaRepository.save(tema);
+    await this.temaRepository.update(tema.id, tema);
+    return this.findTemaById(tema.id);
   }
 
   async deleteTema(id: number): Promise<DeleteResult> {

@@ -29,7 +29,7 @@ export class PostagemController {
     return this.postagemService.findPostById(id);
   }
 
-  @Get('/titulo/:title')
+  @Get('/title/:title')
   @HttpCode(HttpStatus.OK)
   async findPostByTitle(@Param('title') title: string): Promise<Postagem[]> {
     return this.postagemService.findPostByTitle(title);
